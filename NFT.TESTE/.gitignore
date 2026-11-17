@@ -1,7 +1,9 @@
-node_modules/
-dist/
-playwright-report/
-test-results/
-.env.local
-reports/
-.lighthouseci/
+node_modules
+dist
+test-results
+playwright-report
+.lighthouse-tmp
+*.local
+design/
+.vercel
+lighthouse/reports/

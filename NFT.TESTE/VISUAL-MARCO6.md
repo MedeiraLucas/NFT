@@ -1,4 +1,4 @@
-# Marco 6 — Alinhamento visual com a referência Nyxa
+# Marco 6 — Alinhamento visual com a referência projeto de referência
 
 A partir da versão KURIO Marco 5, foram recriados **com código próprio**: cabeçalho, navegação mobile, composição da autenticação (modal desktop / tela cheia mobile), cores, tipografia, espaçamentos e tratamento visual das páginas de catálogo, detalhe, carrinho e checkout.
 
@@ -21,4 +21,4 @@ npm.cmd run dev
 ```
 
 ## Referência
-Nyxa de João Batista Neto, fornecido pelo usuário, licenciado sob MIT. A referência foi estudada para o layout; a implementação neste pacote foi escrita independentemente, sem transferir os arquivos de código Nyxa.
+projeto de referência de João Batista Neto, fornecido pelo usuário, licenciado sob MIT. A referência foi estudada para o layout; a implementação neste pacote foi escrita independentemente, sem transferir os arquivos de código projeto de referência.

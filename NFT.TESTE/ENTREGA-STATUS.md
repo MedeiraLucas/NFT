@@ -1,6 +1,6 @@
 # KURIO — estado real da entrega
 
-Base: projeto KURIO independente (Marco 3). O projeto Nyxa foi usado apenas como referência de escopo e cobertura, sem incorporar seu código.
+Base: projeto KURIO independente (Marco 3). O projeto projeto de referência foi usado apenas como referência de escopo e cobertura, sem incorporar seu código.
 
 ## Implementado
 - Catálogo, detalhe, busca e filtros, carrinho visitante/autenticado, cupom e cotação decimal.

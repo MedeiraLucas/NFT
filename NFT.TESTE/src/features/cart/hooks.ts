@@ -1,10 +1,60 @@
-import {useMutation,useQuery,useQueryClient} from '@tanstack/react-query';
-import {api} from '../../lib/api/client';
-import type {CartItem,CartResponse,CartQuote} from '../../contracts';
-import {useSession} from '../auth/hooks';
-import {getVisitorCart,saveVisitorCart} from '../../lib/session/visitorCart';
-export {getVisitorCart,saveVisitorCart} from '../../lib/session/visitorCart';
-export function useCart(){const session=useSession();const userId=session.data?.user?.id;return useQuery({queryKey:['cart',userId||'visitor'],enabled:!session.isPending,queryFn:async()=>userId?(await api.get<CartResponse>('/cart')).data:{items:getVisitorCart()},staleTime:0})}
-export function useSaveCart(){const qc=useQueryClient();const session=useSession();const userId=session.data?.user?.id;return useMutation({mutationFn:async(items:CartItem[])=>{if(userId)return (await api.put<CartResponse>('/cart',{items})).data;saveVisitorCart(items);return {items}},onSuccess:()=>{qc.invalidateQueries({queryKey:['cart']});qc.invalidateQueries({queryKey:['quote']})}})}
-export function useQuote(items:CartItem[],coupon:string){return useQuery({queryKey:['quote',items,coupon],enabled:items.length>0,queryFn:async()=> (await api.post<CartQuote>('/quote',{items,coupon})).data,retry:1})}
-export function useAddToCart(){const cart=useCart();const save=useSaveCart();return {isPending:save.isPending,add:async(nftId:string,quantity=1)=>{const items=cart.data?.items||[];const old=items.find(i=>i.nftId===nftId);const next=old?items.map(i=>i.nftId===nftId?{...i,quantity:i.quantity+quantity}:i):[...items,{nftId,quantity}];return save.mutateAsync(next)}}}
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { AddCartItemInput, Cart, NetworkId } from '@/contracts/cart'
+import { api } from '@/lib/api/endpoints'
+import { keys } from '@/lib/query/keys'
+import { useOwner } from '@/features/auth/hooks'
+
+/** Carrinho do dono atual (conta ou visitante). Persistido na API simulada. */
+export function useCart() {
+  const owner = useOwner()
+  return useQuery({
+    queryKey: keys.cart(owner),
+    queryFn: ({ signal }) => api.cart.get({ signal }),
+  })
+}
+
+/**
+ * Toda mutation do carrinho devolve o carrinho atualizado: gravamos direto no
+ * cache e invalidamos as cotações, que dependem dele.
+ */
+function useCartMutation<TVars>(fn: (vars: TVars) => Promise<Cart>) {
+  const qc = useQueryClient()
+  const owner = useOwner()
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: (cart) => {
+      qc.setQueryData(keys.cart(owner), cart)
+      void qc.invalidateQueries({ queryKey: keys.quotes(owner) })
+    },
+  })
+}
+
+export const useAddToCart = () => useCartMutation((input: AddCartItemInput) => api.cart.add(input))
+
+export const useUpdateCartItem = () =>
+  useCartMutation(({ editionId, quantity }: { editionId: string; quantity: number }) =>
+    api.cart.update(editionId, quantity),
+  )
+
+export const useRemoveCartItem = () => useCartMutation((editionId: string) => api.cart.remove(editionId))
+
+export const useApplyCoupon = () => useCartMutation((code: string) => api.cart.applyCoupon(code))
+
+export const useRemoveCoupon = () => useCartMutation((_: void) => api.cart.removeCoupon())
+
+/**
+ * Cotação: subtotal, desconto, taxa de rede e total calculados pela API.
+ * Nunca fica "fresca" no cache: é a referência para fechar o pedido.
+ */
+export function useQuote(network: NetworkId, enabled = true) {
+  const owner = useOwner()
+  return useQuery({
+    queryKey: keys.quote(owner, network),
+    queryFn: ({ signal }) => api.cart.quote(network, { signal }),
+    enabled,
+    staleTime: 0,
+  })
+}
+
+export const cartItemCount = (cart: Cart | undefined): number =>
+  cart?.lines.reduce((sum, l) => sum + l.quantity, 0) ?? 0

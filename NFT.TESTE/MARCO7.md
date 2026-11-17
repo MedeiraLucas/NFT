@@ -1,6 +1,6 @@
 # Marco 7 — Qualidade, segurança e validação
 
-Base: Marco 6, com visual Nyxa-inspired preservado. Esta entrega **não** substitui o design existente.
+Base: Marco 6, com visual projeto de referência-inspired preservado. Esta entrega **não** substitui o design existente.
 
 ## Adicionado
 - `e2e/security-realtime.spec.ts`: testes de autenticação obrigatória para pedidos, eventos duplicados/antigos e validação do relay.

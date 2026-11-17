@@ -1,0 +1,54 @@
+{
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "best-practices": 95,
+    "seo": 90
+  },
+  "results": [
+    {
+      "scenario": "home-mobile",
+      "scores": {
+        "performance": 83,
+        "accessibility": 100,
+        "best-practices": 96,
+        "seo": 100
+      },
+      "passed": false,
+      "html": "home-mobile.report.html"
+    },
+    {
+      "scenario": "market-mobile",
+      "scores": {
+        "performance": 83,
+        "accessibility": 100,
+        "best-practices": 96,
+        "seo": 100
+      },
+      "passed": false,
+      "html": "market-mobile.report.html"
+    },
+    {
+      "scenario": "home-desktop",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 96,
+        "seo": 100
+      },
+      "passed": true,
+      "html": "home-desktop.report.html"
+    },
+    {
+      "scenario": "market-desktop",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 96,
+        "seo": 100
+      },
+      "passed": true,
+      "html": "market-desktop.report.html"
+    }
+  ]
+}

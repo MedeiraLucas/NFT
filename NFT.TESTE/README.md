@@ -1,46 +1,160 @@
-# KURIO — NFT Marketplace | Jungle Gaming
+# Kurio
 
-Demonstração React + TypeScript, com API simulada via MSW e Socket.IO para notificações. Não utiliza blockchain, dinheiro ou carteiras reais.
+**Marketplace de NFTs** · React · TypeScript · TanStack Router e Query · Socket.IO · MSW
 
-## Pré-requisitos
-Node.js 22 (ou >=20.19), npm e Chromium do Playwright para os testes. No PowerShell do Windows, substitua `npm` por `npm.cmd` e `npx` por `npx.cmd`.
+[![Testes](https://img.shields.io/badge/testes_E2E-41-087449?style=flat-square)](#testes-e-qualidade)
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev)
 
-## Instalação local
+Marketplace de arte digital com catálogo, favoritos, carrinho, checkout e conta do colecionador. Preços e estoque mudam em tempo real pelo Socket.IO, e a compra continua correta mesmo com rede lenta, resposta perdida ou clique repetido.
+
+🔗 **Demo:** [kurio-nft-marketplace-x1ok.onrender.com](https://kurio-nft-marketplace-x1ok.onrender.com)
+
+![Captura de tela da Kurio](docs/img/preview.png)
+
+> Projeto pessoal de portfólio. "Kurio" é uma marca fictícia. Não há backend real: a API REST e os eventos em tempo real são simulados no navegador com MSW, inclusive na demo publicada.
+
+## Funcionalidades
+
+- Catálogo com busca, filtros (categoria, rede, preço, disponibilidade) e ordenação salvos na URL
+- Página do NFT com galeria, edições, avaliações e preço atualizado em tempo real
+- Cadastro, login, logout e sessão que expira, com volta para a página onde a pessoa estava
+- Favoritos com resposta imediata e desfeitos sozinhos se a API falhar
+- Carrinho com cupom, persistido entre visitas e unido ao da conta no login
+- Checkout com revisão dos valores, pedido idempotente (um clique repetido ou um reenvio não cria dois pedidos) e aviso quando preço ou estoque mudam
+- Perfil com atividade, pedidos e carteiras
+- Reconexão do tempo real com reconciliação pela API, sem aplicar eventos duplicados ou antigos
+- Painel "Cenários" para simular falhas: lentidão, erro do servidor, sessão expirada, pagamento recusado e outras
+
+## Stack
+
+- **[React 19](https://react.dev)** + **TypeScript** + **[Vite](https://vite.dev)**
+- **[TanStack Router](https://tanstack.com/router)** para rotas e **[TanStack Query](https://tanstack.com/query)** para cache dos dados
+- **Axios** e **socket.io-client**
+- **[MSW](https://mswjs.io)** para simular a API REST e o Socket.IO
+- **[Tailwind CSS v4](https://tailwindcss.com)** + **shadcn/ui**
+- **zod** para validar os contratos e **decimal.js** para os valores em ETH
+- **[Playwright](https://playwright.dev)** para os testes E2E e **Lighthouse** para a auditoria
+- **[Render](https://render.com)** para o deploy
+
+A arquitetura, os contratos REST e de eventos, o cache e a reconciliação estão em [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## Como rodar localmente
+
+Requisitos: Node.js 20 ou mais recente e npm.
+
 ```bash
+git clone https://github.com/MedeiraLucas/NFT.git
+cd NFT/NFT.TESTE
 npm ci
 npm run dev
 ```
-O service worker MSW está versionado em `public/mockServiceWorker.js`. Se for necessário regenerá-lo: `npx msw init public/ --save`.
 
-## Simular a versão publicada localmente
-```bash
-npm run build
-npm start
-```
-Abra `http://localhost:4173`. Diferentemente de `vite preview`, `npm start` executa o servidor Socket.IO usado no deploy. Acesso direto a `/nft/:id`, `/cart`, `/checkout` etc. usa fallback SPA.
+Abra [http://localhost:5173](http://localhost:5173). Os mocks já vêm ligados.
 
-## Deploy público — Render
-1. Publique **este código** em um repositório GitHub.
-2. No Render, selecione **New > Blueprint** e o repositório que contém `render.yaml`.
-3. Confirme `npm ci && npm run build` e `npm start`; aguarde o serviço ficar disponível.
-4. Teste acesso direto e refresh de rotas, login, checkout e WebSocket na URL pública.
+### Variáveis de ambiente
 
-O plano gratuito pode suspender a instância quando inativa. Mocks e sessões são armazenados no navegador; não compartilham um banco de dados global. O endpoint de publicação de eventos não tem autenticação e é apenas para a demonstração.
+Todas são opcionais.
 
-## Mocks e cenários
-`VITE_ENABLE_MOCKS=true` é o padrão; `false` exige API externa não incluída. Para restaurar os dados locais, limpe a chave `kurio-mock-db-v2` no Local Storage e recarregue. Crie uma conta fictícia pelo cadastro; não há credenciais fixas exigidas. Cupons demonstrativos: `WELCOME10` e `ETHERS5`. Estados de pagamento simulados e fixtures ficam em `src/mocks/`.
+| Variável | Padrão | Uso |
+| --- | --- | --- |
+| `VITE_ENABLE_MOCKS` | ligado | `false` desliga o MSW |
+| `VITE_MOCK_SCENARIO` | `default` | Cenário inicial da API simulada |
+| `PW_CHROMIUM_PATH` | não definido | Caminho de um Chromium já instalado, para o Playwright |
+| `E2E_BASE_URL` | preview local | Roda os testes contra outra URL (ex.: a demo) |
+| `CHROME_PATH` | Chromium do Playwright | Navegador usado pelo Lighthouse |
+| `LH_BASE_URL` / `LH_RUNS` | preview local / 3 | URL auditada / número de medições |
 
-## Comandos
-```bash
-npm run dev
-npm run build
-npm run typecheck
-npm run lint
-npm run test:e2e
-npm run test:e2e:report
-npm run audit:lighthouse
-```
-`npm run audit:lighthouse` usa `vite preview` para medir páginas estáticas; para testar o Socket.IO na versão de produção use `npm start`. Consulte `ARCHITECTURE.md` para limitações, sessão, cache, REST e eventos.
+### Comandos
 
-## Estado da entrega
-O código contém os fluxos e testes acumulados nos marcos anteriores. **Não foi feita uma nova execução de testes ou auditoria para este pacote**, a pedido do usuário; a validação final deve ocorrer antes da submissão. É necessário informar a URL real do deploy e do repositório depois de publicá-los.
+| Comando | O que faz |
+| --- | --- |
+| `npm run dev` | Desenvolvimento com mocks |
+| `npm run build` | Verificação de tipos e build de produção (`dist/`) |
+| `npm run preview` | Serve o build em http://localhost:4173 |
+| `npm run typecheck` | Verificação de tipos |
+| `npm run lint` | ESLint |
+| `npm run test:e2e` | Testes Playwright, desktop e mobile (faz o build e sobe o preview sozinho) |
+| `npm run test:e2e:update` | Gera de novo as imagens da regressão visual |
+| `npm run test:e2e:report` | Relatório HTML, com traces das falhas |
+| `npm run lighthouse` | Auditoria Lighthouse (3 medições por página e perfil) |
+
+Para os testes e o Lighthouse, instale o navegador uma vez com `npx playwright install chromium`.
+
+## Contas e cupons de teste
+
+| Usuário | E-mail | Senha |
+| --- | --- | --- |
+| Ana | `ana@example.com` | `Senha@123` |
+| Bruno | `bruno@example.com` | `Senha@456` |
+
+Cupons: `WELCOME10` (10%), `ETHER5` (5%) e `EXPIRED20` (expirado). Qualquer outro código é inválido.
+
+## Cenários da API simulada
+
+Formas de escolher o cenário:
+
+1. **Painel "Cenários"**, no canto inferior esquerdo (também na demo): escolha e clique em **Aplicar**.
+2. **URL:** `?scenario=<id>`, ex.: https://kurio-nft-marketplace-x1ok.onrender.com/?scenario=slow (fica salvo na aba).
+3. **Build:** variável `VITE_MOCK_SCENARIO`.
+4. **Console:** `window.__mock.setScenario('<id>')`.
+
+Para voltar ao estado inicial, use o botão **Restaurar dados** no painel ou `await window.__mock.reset()`. Os dois restauram o banco simulado, a sessão e o carrinho.
+
+| Cenário | Efeito |
+| --- | --- |
+| `default` | Tudo funciona, latência baixa |
+| `empty` | Catálogo vazio |
+| `slow` | Respostas de cerca de 2 s |
+| `variable-latency` | Latência entre 50 ms e 1,8 s, sempre na mesma sequência |
+| `out-of-order` | Buscas mais longas respondem antes |
+| `offline` | Queda de conexão em toda requisição `/api` |
+| `server-error` | Toda requisição `/api` responde 500 |
+| `unavailable` | Toda requisição `/api` responde 503 |
+| `expired-session` | Rotas autenticadas respondem 401 `session_expired` |
+| `price-changed` | O preço do 1º item sobe entre a revisão e a confirmação |
+| `sold-out` | A edição do 1º item esgota entre a revisão e a confirmação |
+| `order-timeout` | O pedido é criado, mas a 1ª resposta nunca chega |
+| `payment-rejected` | Pagamento recusado |
+| `slow-payment` | Pedido fica pendente por 6 s |
+| `favorite-fails` | Favoritar e desfavoritar respondem 503 |
+| `wallet-refused` | A carteira recusa a conexão |
+
+### Como reproduzir as falhas
+
+Entre como Ana, adicione um NFT ao carrinho e siga:
+
+| Fluxo | Passos | Resultado esperado |
+| --- | --- | --- |
+| Pagamento recusado | Cenário `payment-rejected`, Pagamento, conectar carteira, Confirmar compra, Confirmar e pagar | "Pagamento recusado" e os itens continuam no carrinho |
+| Timeout com idempotência | Cenário `order-timeout` e confirmar a compra | Depois de uns 8 s o app reenvia com a mesma chave e abre o mesmo pedido. Só aparece 1 pedido em Perfil, Atividade |
+| Clique repetido | Clicar várias vezes em "Confirmar e pagar" | Um único pedido |
+| Preço alterado | Cenário `price-changed` e confirmar | Aviso "Os valores mudaram" com o novo total. É preciso confirmar de novo |
+| Esgotado | Cenário `sold-out` e confirmar | Aviso de indisponibilidade e o pedido não é criado |
+| Tempo real | Com o carrinho aberto, no console: `__mock.updateEdition('nft-01','nft-01-std',{priceEth:'2'})` | Aviso e resumo recalculado pela API |
+| Queda do socket com pedido pendente | Cenário `slow-payment`, confirmar, `__mock.socket.disconnect()` e recarregar | O mesmo pedido pendente e depois o recibo, sem nova compra |
+| Eventos duplicados ou antigos | No detalhe de um NFT: `__mock.socket.replayLast()` e `__mock.socket.emitStale('nft-03')` | Nada muda na tela |
+| Sessão expirada | No pagamento: `__mock.expireSession()` e confirmar (ou cenário `expired-session`) | Vai para o login com aviso e, depois de entrar, volta ao pagamento com os campos preenchidos |
+| Carteira recusada | Cenário `wallet-refused` e Conectar carteira | Mensagem de recusa e dá para tentar de novo |
+| Falha ao favoritar | Cenário `favorite-fails` e favoritar | O favorito volta ao estado anterior, com aviso |
+| API fora do ar | Cenário `offline` ou `server-error` e abrir o início | Erro com "Tentar novamente". Voltar ao `default` e tentar de novo recupera |
+| Carregamento lento | Cenário `slow` | Skeletons no catálogo, no detalhe e no resumo do carrinho |
+| Respostas fora de ordem | Cenário `out-of-order` e digitar uma busca rápido | A tela mostra o resultado da última busca |
+
+## Testes e qualidade
+
+- **41 testes E2E** com Playwright, em desktop (1440×900) e mobile (Pixel 7): catálogo, autenticação, carrinho, compra, tempo real, conta, acessibilidade, regressão visual e contratos da API simulada.
+- **Lighthouse** com mediana de 3 medições: Acessibilidade, Boas práticas e SEO em 100 nas páginas auditadas. O resultado completo está em [lighthouse/summary.md](./lighthouse/summary.md) e a análise em [ARCHITECTURE.md](./ARCHITECTURE.md#performance-e-lighthouse).
+
+## Desenvolvimento
+
+Projeto KURIO desenvolvido e adaptado para o desafio frontend, com apoio de ferramentas de IA na implementação, documentação e revisão.
+
+## Responsável pelo projeto
+
+**Lucas Medeira**  
+GitHub: [@MedeiraLucas](https://github.com/MedeiraLucas)
+
