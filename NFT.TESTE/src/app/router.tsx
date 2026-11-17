@@ -1,0 +1,25 @@
+import {createRootRoute,createRoute,createRouter,Outlet} from '@tanstack/react-router';
+import {Layout} from '../components/Layout';
+import {Home} from '../pages/Home';
+import {lazy, Suspense} from 'react';
+const Detail=lazy(()=>import('../pages/Detail').then(m=>({default:m.Detail})));
+const Auth=lazy(()=>import('../pages/Auth').then(m=>({default:m.Auth})));
+const Cart=lazy(()=>import('../pages/Cart').then(m=>({default:m.Cart})));
+const Checkout=lazy(()=>import('../pages/Checkout').then(m=>({default:m.Checkout})));
+const OrderPage=lazy(()=>import('../pages/Order').then(m=>({default:m.OrderPage})));
+const Wallets=lazy(()=>import('../pages/Wallets').then(m=>({default:m.Wallets})));
+const Profile=lazy(()=>import('../pages/Profile').then(m=>({default:m.Profile})));
+const deferred=(Component:typeof Detail)=>(()=><Suspense fallback={<main className="page" aria-label="Carregando página"/>}><Component/></Suspense>);
+const root=createRootRoute({component:()=> <Layout><Outlet/></Layout>,notFoundComponent:()=> <main className="page"><h1>Página não encontrada</h1></main>});
+const home=createRoute({getParentRoute:()=>root,path:'/',component:Home});
+const market=createRoute({getParentRoute:()=>root,path:'/market',component:Home});
+const detail=createRoute({getParentRoute:()=>root,path:'/nft/$id',component:deferred(Detail)});
+const login=createRoute({getParentRoute:()=>root,path:'/login',component:()=> <Suspense fallback={<main className="page" aria-label="Carregando página"/>}><Auth mode="login"/></Suspense>});
+const signup=createRoute({getParentRoute:()=>root,path:'/signup',component:()=> <Suspense fallback={<main className="page" aria-label="Carregando página"/>}><Auth mode="signup"/></Suspense>});
+const cart=createRoute({getParentRoute:()=>root,path:'/cart',component:deferred(Cart)});
+const checkout=createRoute({getParentRoute:()=>root,path:'/checkout',component:deferred(Checkout)});
+const order=createRoute({getParentRoute:()=>root,path:'/orders/$id',component:deferred(OrderPage)});
+const wallets=createRoute({getParentRoute:()=>root,path:'/wallets',component:deferred(Wallets)});
+const profile=createRoute({getParentRoute:()=>root,path:'/profile',component:deferred(Profile)});
+export const router=createRouter({routeTree:root.addChildren([home,market,detail,login,signup,cart,checkout,order,wallets,profile]),defaultPreload:'intent'});
+declare module '@tanstack/react-router'{interface Register{router:typeof router}}
