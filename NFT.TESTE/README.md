@@ -1,20 +1,3 @@
-# Kurio
-
-**Marketplace de NFTs** · React · TypeScript · TanStack Router e Query · Socket.IO · MSW
-
-[![Testes](https://img.shields.io/badge/testes_E2E-41-087449?style=flat-square)](#testes-e-qualidade)
-[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev)
-
-Marketplace de arte digital com catálogo, favoritos, carrinho, checkout e conta do colecionador. Preços e estoque mudam em tempo real pelo Socket.IO, e a compra continua correta mesmo com rede lenta, resposta perdida ou clique repetido.
-
-🔗 **Demo:** [kurio-nft-marketplace-x1ok.onrender.com](https://kurio-nft-marketplace-x1ok.onrender.com)
-
-![Captura de tela da Kurio](docs/img/preview.png)
-
 > Projeto pessoal de portfólio. "Kurio" é uma marca fictícia. Não há backend real: a API REST e os eventos em tempo real são simulados no navegador com MSW, inclusive na demo publicada.
 
 ## Funcionalidades
