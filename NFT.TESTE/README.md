@@ -1,35 +1,21 @@
-<div align="center">
+# Kurio
 
-# KURIO
+**Marketplace de NFTs** · React · TypeScript · TanStack Router e Query · Socket.IO · MSW
 
-### Marketplace de NFTs e colecionáveis digitais
+[![Testes](https://img.shields.io/badge/testes_E2E-41-087449?style=flat-square)](#testes-e-qualidade)
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev)
 
-Uma experiência de descoberta, coleção e compra de NFTs, desenvolvida com **React, TypeScript e uma arquitetura frontend orientada a dados**.
+Marketplace de arte digital com catálogo, favoritos, carrinho, checkout e conta do colecionador. Preços e estoque mudam em tempo real pelo Socket.IO, e a compra continua correta mesmo com rede lenta, resposta perdida ou clique repetido.
 
-[![React](https://img.shields.io/badge/React-19-149ECA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+🔗 **Demo:** [kurio-nft-marketplace-x1ok.onrender.com](https://kurio-nft-marketplace-x1ok.onrender.com)
 
-**[🌐 Acessar demonstração](https://kurio-nft-marketplace-x1ok.onrender.com)** · **[💻 Repositório](https://github.com/MedeiraLucas/NFT)**
+![Captura de tela da Kurio](docs/img/preview.png)
 
-</div>
-
----
-
-## Sobre o projeto
-
-O **KURIO** é um marketplace de NFTs desenvolvido como projeto frontend para explorar a construção de interfaces responsivas, navegação entre páginas, gerenciamento de estado, consumo de APIs e experiências de compra.
-
-O projeto reúne uma interface visual inspirada em um protótipo do Figma e fluxos funcionais de catálogo, autenticação, carrinho, checkout e área do usuário. Para permitir a navegação e os testes sem depender de uma infraestrutura externa, as APIs e os cenários de negócio são **simulados com MSW**.
-
-> **Nota:** esta é uma aplicação de demonstração. As carteiras, transações e compras são simuladas; não há negociação real de criptoativos.
-
-## Prévia
-
-![Prévia da interface do KURIO](docs/img/preview.png)
-
-> Caso a imagem não apareça, confira se `docs/img/preview.png` está presente no repositório.
+> Projeto pessoal de portfólio. "Kurio" é uma marca fictícia. Não há backend real: a API REST e os eventos em tempo real são simulados no navegador com MSW, inclusive na demo publicada.
 
 ## Funcionalidades
 
